@@ -14,7 +14,8 @@ class Controller {
   }
 
   async byId(req, res) {
-    const blockNumber = req.params.id
+    const id = req.params.id
+    const blockNumber = id ? id.split('.')[0] : id
 
     // TODO: Store generated SVG and return that first if generated!
     try {
@@ -27,7 +28,7 @@ class Controller {
       })
 
       // Pass data to generate blockchain vis
-      const output = await Vis.blockBurst(data.records || data)
+      const output = await Vis.blockBurst(data.records || data, { ...req.query })
 
       // Return generated svg
       res.set('Content-Type', 'image/svg+xml')

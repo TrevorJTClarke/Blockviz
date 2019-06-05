@@ -3,26 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <title>Visuals</title>
+
+<style>
+body {
+  background: #e3e8ee;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.stacks {
+  display: flex;
+  flex-direction: column-reverse;
+  margin: auto auto 0;
+  position: relative;
+  height: 50vh;
+  width: 35vw;
+}
+
+.disk {
+  transform: rotate3d(1, 0, 0, 75deg) translateY(0px);
+  transition: all 220ms ease;
+  height: 40px;
+  width: 50vw;
+  border-radius: 50%;
+  transition: all 120ms ease;
+  left: 0;
+}
+
+.disk:hover {
+  transform: rotate3d(1, 0, 0, 0deg) translateY(-230px);
+  height: 180px;
+  z-index: 99999;
+}
+
+.disk:last-of-type {
+  transform: rotate3d(1, 0, 0, 60deg) translateY(-20px);
+  height: 180px;
+  z-index: 99999;
+}
+</style>
 </head>
 <body>
-  <div class="stacks">
-    <div class="disk">
-      <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
-        <g id="container" transform="translate(200,150)">
-            <circle r="150" style="opacity: 0.1;"></circle>
-            <path display="none" d="M4.592425496802574e-15,-75A75,75,0,1,1,-4.592425496802574e-15,75A75,75,0,1,1,4.592425496802574e-15,-75Z" fill-rule="evenodd" style="fill: #5687d1; opacity: 1;"></path>
-            <path d="M6.4946704217662e-15,-106.06601717798213A106.06601717798213,106.06601717798213,0,1,1,6.4946704217662e-15,106.06601717798213L4.592425496802574e-15,75A75,75,0,1,0,4.592425496802574e-15,-75Z" fill-rule="evenodd" style="fill: #6ab975; opacity: 1;"></path>
-            <path d="M6.4946704217662e-15,106.06601717798213A106.06601717798213,106.06601717798213,0,0,1,-91.85586535436923,-53.033008588991L-64.95190528383293,-37.49999999999996A75,75,0,0,0,4.592425496802574e-15,75Z" fill-rule="evenodd" style="fill: #de783b; opacity: 1;"></path>
-            <path d="M7.954314290436801e-15,-129.9038105676658A129.9038105676658,129.9038105676658,0,0,1,112.50000000000001,64.95190528383287L91.85586535436919,53.03300858899105A106.06601717798213,106.06601717798213,0,0,0,6.4946704217662e-15,-106.06601717798213Z" fill-rule="evenodd" style="opacity: 1;"></path>
-            <path d="M7.954314290436801e-15,129.9038105676658A129.9038105676658,129.9038105676658,0,0,1,-112.49999999999999,64.95190528383294L-91.85586535436917,53.0330085889911A106.06601717798213,106.06601717798213,0,0,0,6.4946704217662e-15,106.06601717798213Z" fill-rule="evenodd" style="opacity: 1;"></path>
-            <path d="M9.184850993605149e-15,-150A150,150,0,0,1,129.9038105676658,-75L112.5,-64.9519052838329A129.9038105676658,129.9038105676658,0,0,0,7.954314290436801e-15,-129.9038105676658Z" fill-rule="evenodd" style="fill: #a173d1; opacity: 1;"></path>
-            <path d="M9.184850993605149e-15,150A150,150,0,0,1,-129.90381056766577,75.00000000000006L-112.49999999999999,64.95190528383294A129.9038105676658,129.9038105676658,0,0,0,7.954314290436801e-15,129.9038105676658Z" fill-rule="evenodd" style="fill: #bbbbbb; opacity: 1;"></path>
-        </g>
-      </svg>
-    </div>
+  <!-- <div class="stacks">
     <div class="disk">
       <img src="http://localhost:1001/visual/7900181.svg" >
     </div>
-  </div>
+    <div class="disk disk1">
+      <img src="http://localhost:1001/visual/5612310.svg" >
+    </div>
+    <div class="disk disk2">
+      <img src="http://localhost:1001/visual/4900179.svg" >
+    </div>
+  </div> -->
+  <div id="stack" class="stacks"></div>
+<script type="text/javascript">
+  const total = 10;
+  const start = 7901181;
+  // const parent = document.querySelector('.stacks')
+  const parent = document.getElementById('stack')
+  console.log('parent', parent)
+
+  const getDisk = (num, idx) => {
+    return `
+      <div id="b${num}" class="disk disk${idx}">
+        <img src="http://localhost:1001/visual/${num}.svg" >
+      </div>
+    `
+  }
+
+  for (let i = 0; i < total; i++) {
+    // parent.appendChild(getDisk(start - i, i))
+    parent.insertAdjacentHTML('afterbegin', getDisk(start - i, i))
+  }
+</script>
 </body>
 </html>

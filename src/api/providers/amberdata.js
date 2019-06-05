@@ -27,7 +27,7 @@ class AmberdataProvider {
   getBlockTransactions(num, query) {
     const queryStr = getQueryFromObject(query)
     const url = `${baseUrl}/blocks/${num}/transactions${queryStr}`
-    console.log('url', url)
+
     return axios.get(url, baseOptions)
       .then(res => {
         const data = res.data
