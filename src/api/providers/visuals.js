@@ -1,7 +1,6 @@
 import fs from 'fs'
 import stream from 'stream'
 import D3Node from 'd3-node'
-// const D3Node = require('d3-node')
 
 class VisualsProvider {
   constructor() {
@@ -49,7 +48,8 @@ class VisualsProvider {
       // when the mouse leaves the parent g.
       vis.append("svg:circle")
         .attr("r", radius)
-        .style("opacity", 0.1);
+        .style("fill", '#f9f9f9')
+        .style("opacity", 1);
 
       // Turn the data into a d3 hierarchy and calculate the sums.
       var root = d3n.d3.hierarchy(json)

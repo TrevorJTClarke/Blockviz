@@ -10,20 +10,13 @@ const baseOptions = {
   }
 }
 
-const apiUrl = process.env.NODE_ENV === 'production'
-    ? process.env.CDN_PUBLIC_URL || 'https://cdn.amberdata.io/v1'
-    : 'http://localhost:4321/v1'
+const getQueryFromObject = obj => {
+  let q
 
-const getAssetPath = hash => {
-  return `${apiUrl}/assets/${hash}.png`
-}
-
-const getShortUrl = hash => {
-  return `https://wb3.io/${hash}`
-}
-
-const getExplorerUrl = hash => {
-  return `https://amberdata.io/addresses/${hash}`
+  for (const k in obj) {
+    if (k && obj[k]) q += `${k}=${obj[k]}&`
+  }
+  return `?${q}`
 }
 
 class AmberdataProvider {
@@ -31,18 +24,15 @@ class AmberdataProvider {
     return this
   }
 
-  getAddress(hash) {
-    const url = `${baseUrl}/addresses/${hash}/information`
+  getBlockTransactions(num, query) {
+    const queryStr = getQueryFromObject(query)
+    const url = `${baseUrl}/blocks/${num}/transactions${queryStr}`
+    console.log('url', url)
     return axios.get(url, baseOptions)
       .then(res => {
         const data = res.data
         if (!data || !data.payload) return {}
-        return {
-          ...data.payload,
-          assetPath: getAssetPath(hash),
-          shortUrl: getShortUrl(hash),
-          siteUrl: getExplorerUrl(hash),
-        }
+        return data.payload
       })
       .catch(() => {
         return {}

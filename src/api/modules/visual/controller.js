@@ -5,7 +5,7 @@ import axios from 'axios'
 import AmberdataProvider from '../../providers/amberdata'
 import VisualsProvider from '../../providers/visuals'
 
-const Amberdata = new AmberdataProvider()
+const AD = new AmberdataProvider()
 const Vis = new VisualsProvider()
 
 class Controller {
@@ -16,11 +16,20 @@ class Controller {
   async byId(req, res) {
     const blockNumber = req.params.id
 
+    // TODO: Store generated SVG and return that first if generated!
     try {
-      // const ref = handleAssetType(hash)
-      // TODO: Pass data here!
-      const output = await Vis.blockBurst()
-      // console.log('output', output)
+      // Get blockchain data
+      const data = await AD.getBlockTransactions(blockNumber, {
+        includPrice: true,
+        includeTokenTransfers: true,
+        includeFunctions: true,
+        includeLogs: true
+      })
+
+      // Pass data to generate blockchain vis
+      const output = await Vis.blockBurst(data.records || data)
+
+      // Return generated svg
       res.set('Content-Type', 'image/svg+xml')
       res.send(output)
     } catch (e) {
