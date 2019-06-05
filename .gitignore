@@ -1,0 +1,14 @@
+# Artifacts
+node_modules
+build
+.env
+!.env.example
+dump.rdb
+
+# Editor directories and files
+.idea
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

@@ -1,0 +1,46 @@
+{
+  "name": "marshwiggles",
+  "version": "0.1.0",
+  "description": "Visualizations for blockchain & market data",
+  "authors": "@trevorjtclarke",
+  "main": "server/index.js",
+  "scripts": {
+    "prepare": "[ ! -f .env ] && cp .env.example .env || exit 0",
+    "start": "node ./build/main.js",
+    "build": "backpack build",
+    "devp": "npm run lint && npm start",
+    "dev": "backpack",
+    "test": "",
+    "lint": "eslint --ext .js --ignore-path .gitignore ./server",
+    "lintfix": "eslint --fix --ext .js --ignore-path .gitignore ./server"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "backpack-core": "^0.7.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "d3-node": "^2.1.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.17.1",
+    "pino": "^4.15.0",
+    "sharp": "^0.20.8"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "^1.13.2"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
+}
