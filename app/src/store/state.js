@@ -8,4 +8,13 @@ const constants = {
 export default {
   constants,
   activeRange: [],
+  activeTypes: {
+    data: true,
+    value: true,
+    transactions: true,
+    tokenTransfers: true,
+    functions: true,
+    logs: true,
+    ether: true,
+  },
 };

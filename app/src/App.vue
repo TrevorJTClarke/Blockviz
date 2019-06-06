@@ -1,6 +1,21 @@
 <template>
   <div class="layout">
     <div class="navigator">
+      <div class="toggles">
+        <!-- <div v-for="(value, k) in activeTypes">
+          {{ k }}
+          {{ value }}
+        </div> -->
+        <ToggleSwitch
+          v-for="(value, k) in activeTypes"
+          :key="k"
+          :title="k"
+          :active="value"
+          :callback="toggleType"
+          :data="k"
+        />
+      </div>
+
       <BlocksStack />
     </div>
     <aside class="metadata">
@@ -10,12 +25,23 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import BlocksStack from './components/BlocksStack.vue';
+import ToggleSwitch from './components/ToggleSwitch.vue';
 
 export default {
   name: 'app',
   components: {
     BlocksStack,
+    ToggleSwitch,
+  },
+
+  computed: {
+    ...mapGetters(['activeTypes']),
+  },
+
+  methods: {
+    ...mapActions(['toggleType']),
   },
 };
 </script>

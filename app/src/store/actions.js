@@ -21,4 +21,11 @@ export default {
     }
     commit('UPDATE_DATA', { key: 'activeRange', value });
   },
+
+  toggleType({ state, commit }, id) {
+    const clone = { ...state.activeTypes };
+    clone[id] = !clone[id];
+    console.log('clone', clone);
+    commit('UPDATE_DATA', { key: 'activeTypes', value: clone });
+  },
 };
