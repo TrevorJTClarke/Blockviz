@@ -24,12 +24,15 @@ async function processBlockVisual(blockNumber, query) {
       includeFunctions: true,
       includeLogs: true
     })
+    query.blockNumber = blockNumber
+
+    if (!data || !data.records) return ''
 
     // Pass data to generate blockchain vis
     const output = await Vis.blockBurst(data.records || data, query)
 
     // write to local file
-    await fs.writeFileSync(visPath, output)
+    // await fs.writeFileSync(visPath, output)
 
     // Return generated svg
     return output

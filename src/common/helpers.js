@@ -11,18 +11,35 @@ export function getEnv(name, defaultValue) {
 const getNode = (name, children, size) => {
   return {
     name,
+    children,
     size: size || children.length,
-    children: children || []
   }
 }
 
-// const formatChildrenFromKey
-
-const formatTxnChildren = childData => {
+const formatNodeChildren = childData => {
   const childs = []
   // map all available data to node style
   Object.keys(childData).map(c => {
-    const k = getNode(c, [], childData[c].length)
+    const k = getNode(c, childData[c], childData[c].length)
+    if (k) childs.push(k)
+  })
+
+  return childs
+}
+
+const formatIndividualChildren = (name, childrens, formatter) => {
+  const childs = []
+  // map all available data to node style
+  childrens.map(c => {
+    let k
+    if (formatter) {
+      k = getNode(name, [], formatter(c))
+    } else {
+      const val = parseFloat(c.value || c.amount) / 1e18
+      const a = val < 1 ? 1 : val
+      k = getNode(name, [], val || 1)
+      // const k = getNode(name, [], 1)
+    }
     if (k) childs.push(k)
   })
 
@@ -37,11 +54,25 @@ export function formatBlock(txns) {
   const tokenTransfers = txns.filter(t => t.tokenTransfers)
   const ether = txns.filter(t => t.value !== '0')
 
-  // level 1
-  const fmtTxns = formatTxnChildren({ functions, logs, tokenTransfers, ether })
-  const transactions = getNode('transactions', fmtTxns, txns.length)
+  // level 2
+  const fmtFns = formatIndividualChildren('functions', functions)
+  const fmtTkns = formatIndividualChildren('tokenTransfers', tokenTransfers)
+  const fmtLogs = formatIndividualChildren('logs', logs, l => l && l.topics ? l.topics.length : 1)
+  const fmtEth = formatIndividualChildren('ether', ether)
 
-  if (transactions) children.push(transactions)
+  // level 1
+  const fmtTxns = formatNodeChildren({
+    functions: fmtFns,
+    logs: fmtLogs,
+    ether: fmtEth,
+    tokenTransfers: fmtTkns
+  })
+  const data = getNode('data', fmtTxns, txns.length)
+  const fmtValue = formatNodeChildren({ ether, tokenTransfers })
+  const value = getNode('value', fmtValue, fmtValue.length)
+
+  if (data) children.push(data)
+  if (value) children.push(value)
   // if (functions) children.push(functions)
   // if (logs) children.push(logs)
   // if (tokenTransfers) children.push(tokenTransfers)

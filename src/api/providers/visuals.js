@@ -5,12 +5,12 @@ import { formatBlock } from '../../common/helpers'
 
 // Mapping of names to colors
 const colors = {
-  transactions: '#6c7074',
-  logs: '#6bbc80',
-  tokenTransfers: '#B3DAEF',
-  functions: '#f44336',
-  ether: 'b3daef',
-  // : '',
+  data: '#0B1F65',
+  value: '#D7A449',
+  tokenTransfers: '#D7A449',
+  functions: '#DB3F29',
+  ether: '#414552',
+  logs: '#1DC690',
 }
 
 class VisualsProvider {
@@ -22,66 +22,61 @@ class VisualsProvider {
     // Dimensions of sunburst
     const width = options.width || 400
     const height = options.height || 400
-    const radius = Math.min(width, height) / 2
+    const stroke = 6
+    const radius = Math.min(width - stroke, height - stroke) / 2
     const d3n = new D3Node()
     const d = d3n.createSVG(width, height)
     const json = formatBlock(data)
-    // console.log('formattedData', json)
 
     // Total size of all segments; we set this later, after loading the data.
     let totalSize = 0
 
-    var vis = d
-      .append("svg:g")
-      .attr("id", "container")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    d.attr('id', `block-${options.blockNumber}`)
 
-    var partition = d3n.d3.partition()
+    const vis = d
+      .append('g')
+      .attr('id', 'burst-container')
+      .attr('transform', `translate(${width / 2},${height / 2})`);
+
+    const partition = d3n.d3.partition()
         .size([2 * Math.PI, radius * radius]);
 
-    var arc = d3n.d3.arc()
-        .startAngle(function(d) { return d.x0; })
-        .endAngle(function(d) { return d.x1; })
-        .innerRadius(function(d) { return Math.sqrt(d.y0); })
-        .outerRadius(function(d) { return Math.sqrt(d.y1); });
+    const arc = d3n.d3.arc()
+        .startAngle(d => d.x0)
+        .endAngle(d => d.x1)
+        .innerRadius(d => Math.sqrt(d.y0))
+        .outerRadius(d => Math.sqrt(d.y1));
 
-    // Main function to draw and set up the visualization, once we have the data.
-    // Bounding circle underneath the sunburst, to make it easier to detect
-    // when the mouse leaves the parent g.
-    vis.append("svg:circle")
-      .attr("r", radius)
-      .style("fill", '#f9f9f9')
-      .style("stroke", '#f9f9f9')
-      .style("opacity", 1);
+    // Main function to draw and set up the visualization
+    vis.append('circle')
+      .attr('r', radius)
+      .style('fill', '#f9f9f9')
+      .style('stroke', '#f9f9f9')
+      .style('strokeWidth', 3)
+      .attr('id', 'circle-base')
+      .style('opacity', 1);
 
     // Turn the data into a d3 hierarchy and calculate the sums.
-    var root = d3n.d3.hierarchy(json)
-      .sum(function(d) {
-        return d.size;
-      })
-      .sort(function(a, b) {
-        return b.value - a.value;
-      });
+    const root = d3n.d3.hierarchy(json)
+      .sum(d => d.size)
+      .sort((a, b) => b.value - a.value);
 
     // For efficiency, filter nodes to keep only those large enough to see.
-    var nodes = partition(root).descendants()
-        .filter(function(d) {
-            return (d.x1 - d.x0 > 0.005); // 0.005 radians = 0.29 degrees
-        });
+    const nodes = partition(root).descendants()
+      .filter(function(d) {
+        return (d.x1 - d.x0 > 0.005); // 0.005 radians = 0.29 degrees
+      });
 
-    var path = vis.data([json]).selectAll("path")
+    const path = vis.data([json]).selectAll('path')
       .data(nodes)
-      .enter().append("svg:path")
-      .attr("display", function(d) {
-        return d.depth ? null : "none";
-      })
-      .attr("d", arc)
-      .attr("fill-rule", "evenodd")
-      .style("fill", function(d) {
-        return colors[d.data.name];
-      })
-      .style("stroke", '#fff')
-      .style("opacity", 1)
+      .enter().append('path')
+      .attr('display', d => d.depth ? null : 'none')
+      .attr('d', arc)
+      .attr('fill-rule', 'evenodd')
+      .style('fill', d => colors[d.data.name])
+      .attr('id', d => `p-type-${d.data.name}`)
+      .style('stroke', '#fff')
+      .style('opacity', 1)
 
     // Get total size of the tree = value of root node from partition.
     totalSize = path.datum().value
