@@ -47,7 +47,7 @@ export default {
   flex-direction: column-reverse;
   margin: auto auto 0;
   position: relative;
-  min-height: 100vh;
+  min-height: 90vh;
   width: 35vw;
 }
 
@@ -62,15 +62,15 @@ export default {
 }
 
 /* active data classes */
-.stack.s-active-data .disk svg #p-type-data {
+.stack.s-active-data .disk svg #circle-base {
   /* fill: #0B1F65 !important; */
-  opacity: 1 !important;
+  opacity: 0.5 !important;
 }
 .stack.s-active-value .disk svg #p-type-value {
   /* fill: #D7A449 !important; */
   opacity: 1 !important;
 }
-.stack.s-active-transactions .disk svg #p-type-transactions {
+.stack.s-active-transactions .disk svg #p-type-data {
   /* fill: #0B1F65 !important; */
   opacity: 1 !important;
 }

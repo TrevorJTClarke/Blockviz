@@ -9,6 +9,7 @@ const constants = {
 export default {
   constants,
   wsActive: false,
+  // wsActive: true,
   activeRange: [],
   activeTypes: {
     data: true,

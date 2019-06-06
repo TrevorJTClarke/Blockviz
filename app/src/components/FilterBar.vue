@@ -13,10 +13,14 @@
         <img src="@/assets/ios-arrow-down.svg" />
       </div>
       <div class="dropdown-content">
-        <label>Start</label>
-        <input type="text" name="" value="">
-        <label>End</label>
-        <input type="text" name="" value="">
+        <div class="range-options">
+          <button class="btn" @click.prevent="goToLatest">Go To Latest</button>
+          <label>End Block</label>
+          <input type="number" v-model="end">
+          <label>Start Block</label>
+          <input type="number" v-model="start">
+          <button class="btn btn-blue" @click.prevent="updateRange">Update</button>
+        </div>
       </div>
     </div>
 
@@ -66,8 +70,15 @@ export default {
     ToggleSwitch,
   },
 
+  data() {
+    return {
+      start: 0,
+      end: 0,
+    };
+  },
+
   computed: {
-    ...mapGetters(['activeTypes', 'currentBlock']),
+    ...mapGetters(['activeTypes', 'activeRange', 'currentBlock']),
     allTypes() {
       return Object.keys(this.activeTypes).map(a => {
         const t = {};
@@ -85,7 +96,22 @@ export default {
   },
 
   methods: {
-    ...mapActions(['toggleType']),
+    ...mapActions(['toggleType', 'setRange']),
+    goToLatest() {
+      // TODO:
+    },
+    updateRange() {
+      // TODO: check that the range is valid!
+      console.log('this.end, this.start', this.end, this.start)
+      this.setRange(this)
+    },
+  },
+
+  mounted() {
+    if (this.activeRange && this.activeRange.length > 0) {
+      this.start = this.activeRange[0]
+      this.end = this.activeRange.length > 1 ? this.activeRange[this.activeRange.length - 1] : 0
+    }
   },
 };
 </script>
@@ -108,6 +134,20 @@ label {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.05em;
+}
+
+.btn {
+  border: 0;
+  background: lightgray;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+  outline: 0;
+}
+
+.btn.btn-blue {
+  background: #1DC690;
+  color: #fff;
 }
 
 .dropdown {
@@ -152,6 +192,7 @@ label {
   padding: 5px 5px 8px;
 }
 
+.dropdown.active .dropdown-content,
 .dropdown:hover .dropdown-content {
   display: flex;
 }
@@ -172,5 +213,28 @@ label {
   font-size: 15pt;
   letter-spacing: 0.025em;
   margin: 0;
+}
+
+.range-options {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 100%;
+}
+.range-options input {
+  padding: 6px 0;
+  font-size: 10pt;
+  width: 100%;
+  display: inline-block;
+  border: 0;
+  border-bottom: 1px solid grey;
+  margin-bottom: 15px;
+  outline: 0;
+}
+.range-options input:focus {
+  border-bottom-color: blue;
+}
+.range-options label {
+  margin: 10px 0 0;
 }
 </style>

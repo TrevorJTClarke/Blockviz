@@ -2,7 +2,10 @@
   <div class="layout">
     <div class="navigator">
       <FilterBar />
-      <BlocksStack />
+      <div class="nav-content">
+        <TimelineRange />
+        <BlocksStack />
+      </div>
     </div>
     <aside class="metadata">
       fjdskal
@@ -15,12 +18,14 @@ import { mapGetters, mapActions } from 'vuex';
 import Web3Data from './utils/web3data';
 import BlocksStack from './components/BlocksStack.vue';
 import FilterBar from './components/FilterBar.vue';
+import TimelineRange from './components/TimelineRange.vue';
 
 export default {
   name: 'app',
   components: {
     BlocksStack,
     FilterBar,
+    TimelineRange,
   },
 
   data() {
