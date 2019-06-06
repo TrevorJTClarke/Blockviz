@@ -3,10 +3,12 @@ const constants = {
     process.env.NODE_ENV === 'production'
       ? 'https://api.domain.com'
       : 'http://localhost:1001',
+  apiKey: window.AMBERDATA_API_KEY || 'UAK000000000000000000000000demo0001',
 };
 
 export default {
   constants,
+  wsActive: false,
   activeRange: [],
   activeTypes: {
     data: true,
@@ -17,4 +19,5 @@ export default {
     logs: true,
     ether: true,
   },
+  currentBlock: {},
 };

@@ -1,14 +1,15 @@
 <template>
   <div
-    :class="{ 'toggle-switch': true, active, disabled }"
+    :class="{ 'toggle-switch': true, active: data.active }"
     @click.prevent="fireCallback"
+    :style="{ background: data.color, opacity: getOpacity(data) }"
   >
-    <!-- <div class="toggle-icon">
-      <icon v-if="active" name="checkmark" />
-      <icon v-if="!active" name="checkmark-outline" />
-    </div> -->
-    <span :class="{ empty: !title }">
-      {{ title }}
+    <div class="toggle-icon">
+      <img v-if="data.active" src="@/assets/ios-checkmark-circle.svg" />
+      <img v-if="!data.active" src="@/assets/ios-checkmark-circle-outline.svg" />
+    </div>
+    <span :class="{ empty: !data.title }">
+      {{ data.title }}
     </span>
   </div>
 </template>
@@ -17,12 +18,15 @@
 export default {
   name: 'ToggleSwitch',
   // active & disabled are booleans
-  props: ['title', 'active', 'data', 'callback', 'disabled'],
+  props: ['data', 'callback'],
 
   methods: {
     fireCallback() {
       if (!this.callback) return;
-      this.callback(this.data);
+      this.callback(this.data.key);
+    },
+    getOpacity(data) {
+      return data.active ? 1 : '0.2';
     },
   },
 };
@@ -30,16 +34,30 @@ export default {
 
 <style scoped>
 .toggle-switch {
-  background: white;
+  background: transparent;
   border-radius: 3px;
   cursor: pointer;
   display: flex;
   overflow: hidden;
+  margin: 3px 3px 0;
 }
-span {
-  color: grey;
-  font-size: 11pt;
-  margin: auto 10px;
+
+.toggle-switch span {
+  color: white;
+  font-size: 9pt;
+  margin: auto 5px;
   white-space: nowrap;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.toggle-icon {
+  display: flex;
+}
+.toggle-icon img {
+  width: 16px;
+  height: 16px;
+  padding: 5px;
 }
 </style>

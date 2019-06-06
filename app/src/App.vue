@@ -1,21 +1,7 @@
 <template>
   <div class="layout">
     <div class="navigator">
-      <div class="toggles">
-        <!-- <div v-for="(value, k) in activeTypes">
-          {{ k }}
-          {{ value }}
-        </div> -->
-        <ToggleSwitch
-          v-for="(value, k) in activeTypes"
-          :key="k"
-          :title="k"
-          :active="value"
-          :callback="toggleType"
-          :data="k"
-        />
-      </div>
-
+      <FilterBar />
       <BlocksStack />
     </div>
     <aside class="metadata">
@@ -26,22 +12,38 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import Web3Data from './utils/web3data';
 import BlocksStack from './components/BlocksStack.vue';
-import ToggleSwitch from './components/ToggleSwitch.vue';
+import FilterBar from './components/FilterBar.vue';
 
 export default {
   name: 'app',
   components: {
     BlocksStack,
-    ToggleSwitch,
+    FilterBar,
+  },
+
+  data() {
+    return {
+      ws: null,
+    };
   },
 
   computed: {
-    ...mapGetters(['activeTypes']),
+    ...mapGetters(['constants', 'wsActive']),
   },
 
   methods: {
-    ...mapActions(['toggleType']),
+    ...mapActions(['setNewBlock']),
+  },
+
+  created() {
+    if (!this.wsActive) return;
+    this.ws = new Web3Data({ apiKey: this.constants.apiKey });
+    this.ws.connect(() => {
+      this.ws.subscribe('block');
+      this.ws.on('block', this.setNewBlock);
+    });
   },
 };
 </script>
@@ -52,7 +54,6 @@ body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   padding: 0;
   margin: 0;
 }

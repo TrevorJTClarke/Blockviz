@@ -35,7 +35,7 @@ export default {
 
   created() {
     if (!this.activeRange || this.activeRange.length <= 1) {
-      this.setRange({ start: 7824821 });
+      this.setRange({ start: 7907874 });
     }
   },
 };
@@ -62,7 +62,7 @@ export default {
 }
 
 /* active data classes */
-.stack.s-active-transactions .disk svg #p-type-data {
+.stack.s-active-data .disk svg #p-type-data {
   /* fill: #0B1F65 !important; */
   opacity: 1 !important;
 }

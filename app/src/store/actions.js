@@ -22,10 +22,22 @@ export default {
     commit('UPDATE_DATA', { key: 'activeRange', value });
   },
 
+  setNewBlock({ commit, state }, block) {
+    if (!block || !block.number) return;
+    let clone = [].concat(state.activeRange);
+
+    // Check if it exists, only push if new
+    if (!clone.includes(block.number)) clone.push(block.number);
+    // make sure order is kept
+    clone = clone.sort((a, b) => b - a).reverse();
+
+    commit('UPDATE_DATA', { key: 'activeRange', value: clone });
+    commit('UPDATE_DATA', { key: 'currentBlock', value: block });
+  },
+
   toggleType({ state, commit }, id) {
     const clone = { ...state.activeTypes };
     clone[id] = !clone[id];
-    console.log('clone', clone);
     commit('UPDATE_DATA', { key: 'activeTypes', value: clone });
   },
 };
