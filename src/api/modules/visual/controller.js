@@ -12,7 +12,7 @@ async function processBlockVisual(blockNumber, query) {
   const visPath = path.join(__dirname, '../../../../', 'static/blocks', `${blockNumber}.svg`)
 
   // Check if we have generated image, if so return immediately
-  if (fs.existsSync(visPath)) {
+  if (fs.existsSync(visPath) && !query.noCache) {
     return await fs.readFileSync(visPath)
   }
 
@@ -32,7 +32,7 @@ async function processBlockVisual(blockNumber, query) {
     const output = await Vis.blockBurst(data.records || data, query)
 
     // write to local file
-    // await fs.writeFileSync(visPath, output)
+    await fs.writeFileSync(visPath, output)
 
     // Return generated svg
     return output

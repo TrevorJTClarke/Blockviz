@@ -3,6 +3,7 @@ node_modules
 build
 .env
 !.env.example
+.editorconfig
 dump.rdb
 
 # Editor directories and files
