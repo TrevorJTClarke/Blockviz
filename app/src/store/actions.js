@@ -1,11 +1,25 @@
 import axios from 'axios';
 
 export default {
-  getBlockVisual({ state }, id) {
+  getBlockVisual({ state, commit }, id) {
     const url = `${state.constants.apiUrl}/visual/${id}`;
     return axios
       .get(url)
-      .then(r => r.data);
+      .then(r => {
+        let parsed
+        try {
+          const match = r.data.match(/(?<=\<data type\=\"text\/json\"\>)(.*)(?=<\/data>)/);
+          parsed = match && match.length > 0 ? JSON.parse(match[0]) : {};
+        } catch (e) {
+          // nothing
+        }
+
+        if (parsed && parsed.number) {
+          commit('UPDATE_CACHE', { id: parsed.number, data: parsed })
+        }
+
+        return r.data;
+      });
   },
 
   setRange({ commit }, { start, end }) {

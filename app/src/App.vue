@@ -76,6 +76,12 @@ body {
   height: 100%;
   min-height: 100vh;
 }
+.nav-content {
+  height: calc(100vh - 50px);
+  /* overflow: scroll; */
+  display: flex;
+  flex-direction: column;
+}
 .metadata {
   background: #f9f9f9;
   width: 350px;

@@ -1,16 +1,16 @@
 import fs from 'fs'
 import stream from 'stream'
 import D3Node from 'd3-node'
-import { formatBlock } from '../../common/helpers'
+import { formatBlock, formatTotals } from '../../common/helpers'
 
 // Mapping of names to colors
 const colors = {
-  data: '#0B1F65',
-  value: '#D7A449',
-  tokenTransfers: '#D7A449',
-  functions: '#DB3F29',
-  ether: '#414552',
-  logs: '#1DC690',
+  data: '#4E4E4E',
+  value: '#3A86AD',
+  tokenTransfers: '#AE497E',
+  functions: '#6B0E12',
+  ether: '#F09B24',
+  logs: '#184B42',
 }
 
 class VisualsProvider {
@@ -20,13 +20,15 @@ class VisualsProvider {
 
   blockBurst(data, options) {
     // Dimensions of sunburst
-    const width = options.width || 400
-    const height = options.height || 400
+    const width = options.width || 600
+    const height = options.height || 600
     const stroke = 6
     const radius = Math.min(width - stroke, height - stroke) / 2
     const d3n = new D3Node()
+    const svgAttrs = { viewport: '0 0 400 400' }
     const d = d3n.createSVG(width, height)
     const json = formatBlock(data)
+    const aggregateData = formatTotals(data)
 
     // Total size of all segments; we set this later, after loading the data.
     let totalSize = 0
@@ -46,6 +48,11 @@ class VisualsProvider {
         .endAngle(d => d.x1)
         .innerRadius(d => Math.sqrt(d.y0))
         .outerRadius(d => Math.sqrt(d.y1));
+
+    // add parse-able json for use within other charts, simple data aggregates
+    vis.append('data')
+      .attr('type', 'text/json')
+      .text(JSON.stringify(aggregateData))
 
     // Main function to draw and set up the visualization
     vis.append('circle')

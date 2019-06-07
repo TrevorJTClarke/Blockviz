@@ -8,6 +8,7 @@ const constants = {
 
 export default {
   constants,
+  cache: {},
   wsActive: false,
   // wsActive: true,
   activeRange: [],

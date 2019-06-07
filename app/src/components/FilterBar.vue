@@ -55,14 +55,24 @@ const addCommas = (x) => {
 };
 
 const colors = {
-  data: '#0B1F65',
-  transactions: '#0B1F65',
-  value: '#D7A449',
-  tokenTransfers: '#D7A449',
-  functions: '#DB3F29',
-  ether: '#414552',
-  logs: '#1DC690',
-};
+  data: '#4E4E4E',
+  value: '#3A86AD',
+  transactions: '#4E4E4E',
+  tokenTransfers: '#AE497E',
+  functions: '#6B0E12',
+  ether: '#F09B24',
+  logs: '#184B42',
+}
+
+// const colors = {
+//   data: '#0B1F65',
+//   transactions: '#0B1F65',
+//   value: '#D7A449',
+//   tokenTransfers: '#D7A449',
+//   functions: '#DB3F29',
+//   ether: '#414552',
+//   logs: '#1DC690',
+// };
 
 export default {
   name: 'FilterBar',

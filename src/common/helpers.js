@@ -73,10 +73,25 @@ export function formatBlock(txns) {
 
   if (data) children.push(data)
   if (value) children.push(value)
-  // if (functions) children.push(functions)
-  // if (logs) children.push(logs)
-  // if (tokenTransfers) children.push(tokenTransfers)
-  // if (ether) children.push(ether)
 
   return getNode('root', children)
+}
+
+export function formatTotals(txns) {
+  const functions = txns.filter(t => t.functions)
+  const logs = txns.filter(t => t.logs)
+  const tokenTransfers = txns.filter(t => t.tokenTransfers)
+  const ether = txns.filter(t => t.value !== '0')
+  let totalEther = 0
+
+  ether.forEach(e => totalEther += parseInt(e.value, 10))
+
+  return {
+    number: txns[0] && txns[0].blockNumber ? parseInt(txns[0].blockNumber, 10) : null,
+    totalTransactions: txns.length,
+    totalFunctions: functions.length,
+    totalLogs: logs.length,
+    totalTokenTransfers: logs.length,
+    totalEther,
+  }
 }
