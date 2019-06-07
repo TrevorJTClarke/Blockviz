@@ -35,7 +35,7 @@ export default {
 
   created() {
     if (!this.activeRange || this.activeRange.length <= 1) {
-      this.setRange({ start: 7907874 });
+      this.setRange({ start: 7913328 });
     }
   },
 };

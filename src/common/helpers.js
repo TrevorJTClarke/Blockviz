@@ -1,3 +1,7 @@
+import Big from 'big.js'
+
+const genesisAddress = '0x0000000000000000000000000000000000000000'
+
 export function getEnv(name, defaultValue) {
   return process.env[name] || defaultValue
 }
@@ -46,12 +50,36 @@ const formatIndividualChildren = (name, childrens, formatter) => {
   return childs
 }
 
+const getTxnsChildArrayByType = (txns, type) => {
+  let arr = []
+
+  txns.forEach(t => {
+    if (t[type]) arr = arr.concat(t[type])
+  })
+
+  return arr
+}
+
+const getTxnsChildFieldsByType = (txns, type) => {
+  let arr = []
+
+  txns.forEach(t => {
+    if (t[type] && t[type] !== 'null') arr.push(t[type])
+  })
+
+  return arr
+}
+
 export function formatBlock(txns) {
   const children = []
   // Basics
   const functions = txns.filter(t => t.functions)
   const logs = txns.filter(t => t.logs)
   const tokenTransfers = txns.filter(t => t.tokenTransfers)
+  // TODO: This is the REAL values...
+  // const functions = getTxnsChildArrayByType(txns, 'functions')
+  // const logs = getTxnsChildArrayByType(txns, 'logs')
+  // const tokenTransfers = getTxnsChildArrayByType(txns, 'tokenTransfers')
   const ether = txns.filter(t => t.value !== '0')
 
   // level 2
@@ -78,20 +106,61 @@ export function formatBlock(txns) {
 }
 
 export function formatTotals(txns) {
-  const functions = txns.filter(t => t.functions)
-  const logs = txns.filter(t => t.logs)
-  const tokenTransfers = txns.filter(t => t.tokenTransfers)
+  const functions = getTxnsChildArrayByType(txns, 'functions')
+  const logs = getTxnsChildArrayByType(txns, 'logs')
+  const tokenTransfers = getTxnsChildArrayByType(txns, 'tokenTransfers')
+  const newContracts = getTxnsChildFieldsByType(txns, 'contractAddress')
   const ether = txns.filter(t => t.value !== '0')
-  let totalEther = 0
 
-  ether.forEach(e => totalEther += parseInt(e.value, 10))
+  // Mapping of token address and total amounts
+  const tokens = {}
+  tokenTransfers.forEach(tkn => {
+    const prev = tokens[tkn.tokenAddress] && tokens[tkn.tokenAddress].amount ? new Big(tokens[tkn.tokenAddress].amount) : new Big(0)
+    // if we see burn "TO" address, lets subtract
+    if (tkn.tokenAddress === genesisAddress) {
+      tokens[tkn.tokenAddress] = prev.minus(tkn.amount)
+    } else if (prev.plus) {
+      tokens[tkn.tokenAddress] = prev.plus(tkn.amount)
+    }
+  })
+  // Now format those tokens with decimals
+  // NOTE: This is hacked since I dont have decimals in payload, default to 1e18
+  Object.keys(tokens).forEach(v => {
+    tokens[v] = new Big(tokens[v]).div(1e18)
+  })
+
+  let totalFunctionsValue = new Big(0)
+  functions.forEach(fn => {
+    totalFunctionsValue = totalFunctionsValue.plus(fn.value)
+  })
+  // Format to Ether
+  totalFunctionsValue = totalFunctionsValue.div(1e18)
+
+  let totalEther = new Big(0)
+  ether.forEach(eth => {
+    totalEther = totalEther.plus(eth.value)
+  })
+  // Format to Ether
+  totalEther = totalEther.div(1e18)
+
+  // const ethers = {
+  //   // TODO: total + volume? (amt of txns)
+  // }
+  // const pieData = {
+  //   // totalether + total tokens + value within functions
+  // }
 
   return {
     number: txns[0] && txns[0].blockNumber ? parseInt(txns[0].blockNumber, 10) : null,
     totalTransactions: txns.length,
     totalFunctions: functions.length,
+    totalFunctionsValue,
     totalLogs: logs.length,
     totalTokenTransfers: logs.length,
+    tokens,
     totalEther,
+    totalEtherTxns: ether.length,
+    newContracts,
+    totalNewContracts: newContracts.length,
   }
 }

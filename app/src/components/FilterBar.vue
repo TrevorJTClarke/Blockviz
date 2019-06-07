@@ -62,7 +62,7 @@ const colors = {
   functions: '#6B0E12',
   ether: '#F09B24',
   logs: '#184B42',
-}
+};
 
 // const colors = {
 //   data: '#0B1F65',
