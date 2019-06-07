@@ -1,5 +1,7 @@
 # Visualizations for Blockchain & Market Data
 
+![](./static/init.png)
+
 ## Start Development & Testing Locally
 
 1. Clone the repo and run `npm install`
