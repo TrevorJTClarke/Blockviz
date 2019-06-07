@@ -10,8 +10,8 @@ const constants = {
 export default {
   constants,
   cache: {},
-  // wsActive: false,
-  wsActive: true,
+  wsActive: false,
+  // wsActive: true,
   activeRange: [],
   activeTypes: {
     data: false,

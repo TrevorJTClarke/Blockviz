@@ -1,6 +1,9 @@
 # Visualizations for Blockchain & Market Data
 
-![](./static/init.png)
+![](./static/action2.png)
+
+##### Sample Block
+![](./static/7907874_example.png)
 
 ## Start Development & Testing Locally
 
