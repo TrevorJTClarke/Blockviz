@@ -1,4 +1,5 @@
 const constants = {
+  amberdataUrl: 'https://web3api.io/api/v1',
   apiUrl:
     process.env.NODE_ENV === 'production'
       ? 'https://api.domain.com'
@@ -13,7 +14,7 @@ export default {
   // wsActive: true,
   activeRange: [],
   activeTypes: {
-    data: true,
+    data: false,
     value: true,
     transactions: true,
     tokenTransfers: true,
@@ -22,4 +23,7 @@ export default {
     ether: true,
   },
   currentBlock: {},
+  ether: {},
+  rankings: [],
+  historicalPrices: {},
 };

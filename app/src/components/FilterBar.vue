@@ -45,14 +45,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { addCommas } from '../utils/helpers';
 import ToggleSwitch from './ToggleSwitch.vue';
-
-const addCommas = (x) => {
-  if (!x) return 0;
-  const tmp = x.toString().split('.');
-  tmp[0] = tmp[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return tmp.join('.');
-};
 
 const colors = {
   data: '#4E4E4E',

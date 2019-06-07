@@ -81,6 +81,7 @@ body {
   /* overflow: scroll; */
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 .metadata {
   background: #f9f9f9;

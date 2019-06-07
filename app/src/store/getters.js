@@ -5,4 +5,7 @@ export default {
   activeRange: state => state.activeRange,
   activeTypes: state => state.activeTypes,
   currentBlock: state => state.currentBlock,
+  ether: state => state.ether,
+  rankings: state => state.rankings,
+  historicalPrices: state => state.historicalPrices,
 };

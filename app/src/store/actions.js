@@ -1,5 +1,13 @@
 import axios from 'axios';
 
+const getHeaders = (options) => {
+  return {
+    headers: {
+      'x-api-key': options.apiKey || '',
+    },
+  };
+};
+
 export default {
   getBlockVisual({ state, commit }, id) {
     const url = `${state.constants.apiUrl}/visual/${id}`;
@@ -22,7 +30,7 @@ export default {
       });
   },
 
-  setRange({ commit }, { start, end }) {
+  setRange({ commit, state }, { start, end }) {
     let total = Math.abs(parseInt(start || 0, 10) - parseInt(end || 0, 10));
     if (total > 100 || !end) total = 10;
     const value = [];
@@ -34,6 +42,13 @@ export default {
       value.push(num);
     }
     commit('UPDATE_DATA', { key: 'activeRange', value });
+
+    if (!state.currentBlock || !state.currentBlock.number) {
+      commit('UPDATE_DATA', {
+        key: 'currentBlock',
+        value: { number: value[value.length - 1] },
+      });
+    }
   },
 
   setNewBlock({ commit, state }, block) {
@@ -53,5 +68,53 @@ export default {
     const clone = { ...state.activeTypes };
     clone[id] = !clone[id];
     commit('UPDATE_DATA', { key: 'activeTypes', value: clone });
+  },
+
+  getMarketRankings({ commit, state }) {
+    const url = `${state.constants.amberdataUrl}/market/rankings`;
+    const options = getHeaders(state.constants);
+    axios.get(url, options).then(r => {
+      const p = r.data.payload;
+      const ether = p.data.filter(a => a.name === 'Ethereum')[0]
+
+      // cache the results
+      commit('UPDATE_DATA', { key: 'rankings', value: p.data });
+      commit('UPDATE_DATA', { key: 'ether', value: ether });
+    });
+  },
+
+  getMarketHistoricalByPair({ commit, state }, pair) {
+    const diff = 4 * 60 * 60 * 1000;
+    const endDate = +new Date();
+    const startDate = +new Date(endDate - diff);
+    const params = `?exchange=gdax&endDate=${endDate}&startDate=${startDate}`;
+    const url = `${state.constants.amberdataUrl}/market/tickers/${pair}/historical${params}`;
+    const options = getHeaders(state.constants);
+    axios.get(url, options).then(r => {
+      const p = r.data.payload;
+      const value = {};
+      value[pair] = p.data;
+
+      // cache the results
+      commit('UPDATE_DATA', { key: 'historicalPrices', value });
+    });
+  },
+
+  getMarketHistoricalByHash({ commit, state }, hash) {
+    const diff = 4 * 60 * 60 * 1000;
+    const endDate = +new Date();
+    const startDate = +new Date(endDate - diff);
+    const params = `?exchange=gdax&endDate=${endDate}&startDate=${startDate}`;
+    const url = `${state.constants.amberdataUrl}/market/tokens/prices/${hash}/historical${params}`;
+    const options = getHeaders(state.constants);
+    axios.get(url, options).then(r => {
+      const p = r.data.payload;
+      const value = {};
+      value[pair] = p.data;
+      console.log('getMarketHistoricalByHash', value);
+
+      // cache the results
+      commit('UPDATE_DATA', { key: 'historicalPrices', value });
+    });
   },
 };
