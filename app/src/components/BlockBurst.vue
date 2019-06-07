@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
 .disk {
-  transform: rotate3d(1, 0, 0, 75deg) translateY(-380px);
+  transform: rotate3d(1, 0, 0, 70deg) translateY(-380px);
   transition: all 220ms ease;
   height: 10px;
   width: 100%;
@@ -52,5 +52,6 @@ export default {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   opacity: 1;
+  width: 100%;
 }
 </style>

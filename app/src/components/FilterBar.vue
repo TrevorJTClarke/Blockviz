@@ -47,12 +47,12 @@
 import { mapActions, mapGetters } from 'vuex';
 import ToggleSwitch from './ToggleSwitch.vue';
 
-const addCommas = x => {
-  if (!x) return 0
-  const tmp = x.toString().split('.')
-  tmp[0] = tmp[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  return tmp.join('.')
-}
+const addCommas = (x) => {
+  if (!x) return 0;
+  const tmp = x.toString().split('.');
+  tmp[0] = tmp[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return tmp.join('.');
+};
 
 const colors = {
   data: '#0B1F65',
@@ -62,7 +62,7 @@ const colors = {
   functions: '#DB3F29',
   ether: '#414552',
   logs: '#1DC690',
-}
+};
 
 export default {
   name: 'FilterBar',
@@ -80,12 +80,12 @@ export default {
   computed: {
     ...mapGetters(['activeTypes', 'activeRange', 'currentBlock']),
     allTypes() {
-      return Object.keys(this.activeTypes).map(a => {
+      return Object.keys(this.activeTypes).map((a) => {
         const t = {};
         t.key = a;
         t.title = a;
         t.color = colors[a];
-        t.active = this.activeTypes[a]
+        t.active = this.activeTypes[a];
         return t;
       });
     },
@@ -102,15 +102,15 @@ export default {
     },
     updateRange() {
       // TODO: check that the range is valid!
-      console.log('this.end, this.start', this.end, this.start)
-      this.setRange(this)
+      this.setRange(this);
     },
   },
 
   mounted() {
     if (this.activeRange && this.activeRange.length > 0) {
-      this.start = this.activeRange[0]
-      this.end = this.activeRange.length > 1 ? this.activeRange[this.activeRange.length - 1] : 0
+      /* eslint prefer-destructuring:0 */
+      this.start = this.activeRange[0];
+      this.end = this.activeRange.length > 1 ? this.activeRange[this.activeRange.length - 1] : 0;
     }
   },
 };

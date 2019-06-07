@@ -48,7 +48,7 @@ export default {
   margin: auto auto 0;
   position: relative;
   min-height: 90vh;
-  width: 35vw;
+  width: 50vw;
 }
 
 /* de-activate data classes on load */
@@ -63,8 +63,7 @@ export default {
 
 /* active data classes */
 .stack.s-active-data .disk svg #circle-base {
-  /* fill: #0B1F65 !important; */
-  opacity: 0.5 !important;
+  opacity: 0.9 !important;
 }
 .stack.s-active-value .disk svg #p-type-value {
   /* fill: #D7A449 !important; */

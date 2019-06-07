@@ -8,7 +8,7 @@
       </div>
     </div>
     <aside class="metadata">
-      fjdskal
+      <BlockMetadata />
     </aside>
   </div>
 </template>
@@ -16,6 +16,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Web3Data from './utils/web3data';
+import BlockMetadata from './components/BlockMetadata.vue';
 import BlocksStack from './components/BlocksStack.vue';
 import FilterBar from './components/FilterBar.vue';
 import TimelineRange from './components/TimelineRange.vue';
@@ -23,6 +24,7 @@ import TimelineRange from './components/TimelineRange.vue';
 export default {
   name: 'app',
   components: {
+    BlockMetadata,
     BlocksStack,
     FilterBar,
     TimelineRange,
