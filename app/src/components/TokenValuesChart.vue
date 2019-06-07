@@ -64,15 +64,10 @@ export default {
 
   mounted() {
     this.refresh();
-
-    setTimeout(() => {
-      this.refresh();
-    }, 4000);
   },
 
   watch: {
-    // activeRange: ['refresh'],
-    cache: ['refresh'],
+    activeRange: ['refresh'],
   },
 };
 </script>

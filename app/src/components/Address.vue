@@ -30,8 +30,6 @@ export default {
         this.data.tokenAddress ||
         this.data.miner
       let src = `${imgPath}${hash}.png`
-      console.log('hash', hash)
-      console.log('src', src)
 
       // support for object based Address data
       if (hash && typeof hash !== 'string' && !Array.isArray(hash)) {

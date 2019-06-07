@@ -44,9 +44,7 @@ export default {
   },
 
   mounted() {
-    this.getMarketRankings().then(() => {
-      console.log('DONeE')
-    })
+    this.getMarketRankings()
   },
 };
 </script>

@@ -65,7 +65,6 @@ export default {
 
   methods: {
     goToBlock() {
-      console.log('HERE')
       window.open(`https://amberdata.io/blocks/${this.r0}`)
     },
     setCurrent(c) {

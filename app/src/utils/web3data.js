@@ -15,8 +15,7 @@ class Web3Data {
     });
   }
 
-  subscribe(name, params) {
-    console.log('params', params);
+  subscribe(name) {
     // TODO: params support
     const p = [`"${name}"`];
     this.socket.send(`{"jsonrpc":"2.0","id":0,"method":"subscribe","params":[${p}]}`);

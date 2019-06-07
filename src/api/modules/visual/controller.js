@@ -37,7 +37,7 @@ async function processBlockVisual(blockNumber, query) {
     // Return generated svg
     return output
   } catch (e) {
-    console.log('e', e)
+    //
   }
 }
 
@@ -73,7 +73,6 @@ class Controller {
       const results = await Promise.all(p)
       res.send('Done')
     } catch (e) {
-      console.log('e', e)
       res.send('Error')
     }
   }

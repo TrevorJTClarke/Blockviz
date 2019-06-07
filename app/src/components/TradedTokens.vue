@@ -3,9 +3,11 @@
     <label>Traded Tokens</label>
     <div class="token-list">
       <div class="token" v-for="item in allTokens">
-        <!-- {{ item.address }}: {{ item.amount }} -->
         <Address :data="item" />
-        {{ item.amount }}
+        <div class="amt-chip">
+          <h4>${{ item.totalValue }}</h4>
+          <span>{{ item.amount }} @ ${{ item.price }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -29,7 +31,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['cache']),
+    ...mapGetters(['cache', 'rankings', 'activeRange']),
   },
 
   methods: {
@@ -51,21 +53,67 @@ export default {
       // combine into easier format, and sort by highest amounts
       // TODO: Add traded price value, if we have!
       Object.keys(dataMap).forEach((g) => {
-        dataTotals.push({ address: g, amount: dataMap[g] });
+        // TODO: rankings!
+        const rankData = this.rankings.filter((r) => r.address && r.address === g);
+        let tokenData;
+        // NOTE: Only showing tradeable assets for now!
+        if (rankData && rankData[0]) {
+          const totalValue = (parseFloat(rankData[0].currentPrice) * parseFloat(dataMap[g])).toFixed(2);
+          tokenData = {
+            address: g,
+            amount: addCommas(parseFloat(dataMap[g]).toFixed(4)),
+            totalValue: addCommas(totalValue),
+            totalValueRaw: totalValue,
+            price: addCommas(parseFloat(rankData[0].currentPrice).toFixed(2)),
+            ...rankData[0]
+          };
+          dataTotals.push(tokenData);
+        }
       });
-      console.log('dataTotals', dataTotals)
 
-      this.allTokens = dataTotals.sort((a, b) => b.amount - a.amount);
+      this.allTokens = dataTotals.sort((a, b) => b.totalValueRaw - a.totalValueRaw);
     },
   },
 
   mounted() {
     this.formatData()
   },
+
+  watch: {
+    activeRange: ['formatData'],
+  },
 };
 </script>
 
 <style>
-.block-metadata {
+.token-list {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  overflow: scroll;
+  max-height: 50vh;
+  padding: 5px 5px 10px;
+  margin: 0 -12px;
+}
+
+.token {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+.token-list .token:nth-child(odd) {
+  background: rgba(0,0,0,0.02);
+}
+
+.amt-chip {
+  text-align: right;
+}
+.amt-chip h4 {
+  margin: 0;
+  font-size: 10pt;
+}
+.amt-chip span {
+  display: block;
+  font-size: 8pt;
 }
 </style>

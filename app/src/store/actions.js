@@ -111,7 +111,6 @@ export default {
       const p = r.data.payload;
       const value = {};
       value[pair] = p.data;
-      console.log('getMarketHistoricalByHash', value);
 
       // cache the results
       commit('UPDATE_DATA', { key: 'historicalPrices', value });
